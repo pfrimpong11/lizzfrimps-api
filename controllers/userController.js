@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const User = require('../models/user');
+const Order = require('../models/orderModel');
 
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '1h' });
@@ -154,24 +155,49 @@ exports.resetPassword = async (req, res) => {
 
 
 
-exports.getProfile = async (req, res) => {
-  const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
+// exports.getProfile = async (req, res) => {
+//   const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
 
-  if (!token) {
-    return res.status(401).json({ msg: 'No token, authorization denied' });
-  }
+//   if (!token) {
+//     return res.status(401).json({ msg: 'No token, authorization denied' });
+//   }
 
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findById(decoded.id).select('-password');
+//   try {
+//     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+//     const user = await User.findById(decoded.id).select('-password');
     
-    if (!user) {
-      return res.status(404).json({ msg: 'User not found' });
-    }
+//     if (!user) {
+//       return res.status(404).json({ msg: 'User not found' });
+//     }
 
-    res.status(200).json(user);
+//     res.status(200).json(user);
+//   } catch (err) {
+//     console.error(err.message);
+//     res.status(500).send('Server error');
+//   }
+// };
+
+
+// Get user's full profile along with their order history
+exports.getProfile = async (req, res) => {
+  try {
+    const userId = req.user.id; // Assuming you're using middleware to extract authenticated user ID
+
+    // Fetch the user's profile
+    const userProfile = await User.findById(userId).select('-password'); // Exclude sensitive fields like password
+
+    // Fetch user's order history
+    const orderHistory = await Order.find({ userId });
+
+    // Combine user profile and order history
+    const fullProfile = {
+      userProfile,
+      orderHistory
+    };
+
+    res.status(200).json(fullProfile);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Server error');
+    res.status(500).json({ message: 'Server Error' });
   }
 };

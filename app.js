@@ -32,6 +32,8 @@ app.use(session({
 // API routes
 app.use('/api', require('./routes/userRoutes'));
 app.use('/api', require('./routes/cakeRoutes'));
+app.use('/api', require('./routes/cartRoutes'));
+app.use('/api', require('./routes/orderRoutes'));
 
 // Start server
 const PORT = process.env.PORT || 3000;
