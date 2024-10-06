@@ -1,15 +1,13 @@
-// app.js
 const express = require('express');
 const connectDB = require('./config/db');
 const dotenv = require('dotenv');
-const bodyParser = require('body-parser');
-const path = require('path');
 const session = require('express-session');
 const cors = require("cors");
 
-
-
+// Load environment variables
 dotenv.config();
+
+// Connect to MongoDB
 connectDB();
 
 const app = express();
@@ -17,7 +15,9 @@ const app = express();
 // CORS middleware
 app.use(cors());
 
-app.use(bodyParser.json());
+// Middleware for parsing JSON and URL-encoded request bodies
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));  // For form submissions
 
 // Use the secret key from the environment variable
 const sessionSecret = process.env.SESSION_SECRET;
@@ -26,13 +26,13 @@ app.use(session({
   secret: sessionSecret,
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: false } 
+  cookie: { secure: false } // Set secure to true if using HTTPS
 }));
-
 
 // API routes
 app.use('/api', require('./routes/userRoutes'));
+app.use('/api', require('./routes/cakeRoutes'));
 
+// Start server
 const PORT = process.env.PORT || 3000;
-
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
