@@ -4,6 +4,6 @@ const orderController = require("../controllers/orderController");
 const authMiddleware = require('../middleware/authMiddleware'); // Middleware to authenticate user
 
 // Route to save the order
-router.post("/order/save", authMiddleware.protect, orderController.saveOrder);
+router.post("/order/save",  orderController.saveOrder);
 
 module.exports = router;

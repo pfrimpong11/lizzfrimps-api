@@ -94,29 +94,38 @@ exports.forgotPassword = async (req, res) => {
 
 
     const mailOptions = {
-      from: process.env.EMAIL_USER,
+      from: `"Lizzfrimps Cakes Empire" <${process.env.EMAIL_USER}>`,
       to: user.email,
-      subject: 'Password Reset Request',
+      subject: 'Password Reset Request - Lizzfrimps Cakes Empire',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #ddd; border-radius: 10px; overflow: hidden;">
+          <!-- Header -->
           <div style="background-color: #4CAF50; color: white; padding: 20px; text-align: center;">
-            <h1 style="margin: 0;">Password Reset Request</h1>
+            <h1 style="margin: 0; font-size: 24px; font-weight: bold;">Password Reset Request</h1>
           </div>
-          <div style="padding: 20px;">
-            <p>Hello <strong>${user.name}</strong>,</p>
-            <p>We received a request to reset your password. You can reset your password by clicking the link below:</p>
-            <div style="text-align: center; margin: 20px 0;">
+          <!-- Body -->
+          <div style="padding: 20px; background-color: #f9f9f9;">
+            <p style="font-size: 16px; color: #333;">Hello <strong>${user.name}</strong>,</p>
+            <p style="font-size: 16px; color: #333;">We received a request to reset your password. Please click the button below to reset your password:</p>
+            <div style="text-align: center; margin: 30px 0;">
               <a href="${process.env.FRONTEND_URL}/ResetPasswordPage?token=${token}" 
-                 style="background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">
+                 style="background-color: #4CAF50; color: white; padding: 12px 24px; text-decoration: none; font-size: 16px; font-weight: bold; border-radius: 5px; display: inline-block;">
                 Reset Password
               </a>
             </div>
-            <p>If you didn’t request this, please ignore this email. Your password will remain unchanged.</p>
+            <p style="font-size: 16px; color: #333;">If you did not request this, please disregard this email. Your password will remain unchanged, and no further action is required.</p>
+            <p style="font-size: 16px; color: #333;">Best regards,<br>The Lizzfrimps Cakes Empire Team</p>
+          </div>
+          <!-- Footer -->
+          <div style="background-color: #f1f1f1; padding: 15px; text-align: center; font-size: 14px; color: #777;">
+            <p style="margin: 0;">© 2024 Lizzfrimps Cakes Empire. All rights reserved.</p>
+            <p style="margin: 0;">7th Adote Obour st, Accra, Ghana</p>
+            <p style="margin: 0;"><a href="#" style="color: #4CAF50; text-decoration: none;">Unsubscribe</a> | <a href="#" style="color: #4CAF50; text-decoration: none;">Contact Us</a></p>
           </div>
         </div>
       `,
     };
-
+    
 
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
