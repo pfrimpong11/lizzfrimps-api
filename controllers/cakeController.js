@@ -15,12 +15,8 @@ conn.once('open', () => {
     });
 });
 
-// Upload cake with image
+// Upload cake with image (Admin)
 exports.uploadCake = async (req, res) => {
-    console.log("API reached");
-    console.log(req.body.name);
-    console.log(req.file.id);
-    
     if (!req.file) {
         return res.status(400).json({ message: 'No file uploaded' });
     }
@@ -79,7 +75,7 @@ exports.getImage = async (req, res) => {
     }
 };
 
-// Delete cake and its associated image
+// Delete cake and its associated image (Admin)
 exports.deleteCake = async (req, res) => {
     try {
         const cake = await Cake.findById(req.params.id);
@@ -109,10 +105,9 @@ exports.getCakes = async (req, res) => {
 
 
 
-
+// (Admin)
 exports.editCake = async (req, res) => {
     const { id } = req.params; // Make sure this ID is being retrieved correctly
-    console.log(id);
     const { name, category, price } = req.body;
   
     try {

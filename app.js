@@ -37,6 +37,9 @@ app.use('/api', require('./routes/orderRoutes'));
 app.use('/api', require('./routes/feedbackRoutes'));
 
 
+// Admin route
+app.use('/api', require('./routes/adminRoutes'));
+
 // Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));

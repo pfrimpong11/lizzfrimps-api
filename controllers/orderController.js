@@ -82,3 +82,53 @@ exports.saveOrder = async (req, res) => {
     res.status(500).json({ message: "Failed to save order or send email", error: err });
   }
 };
+
+
+
+
+// Controller to get all orders (Admin)
+exports.getAllOrders = async (req, res) => {
+  try {
+    const orders = await Order.find().populate("userId"); // Populate user info
+    res.status(200).json(orders);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching orders", error });
+  }
+};
+
+// Controller to filter orders by delivery date (Admin)
+exports.filterOrdersByDate = async (req, res) => {
+  const { deliveryDate } = req.query; // Get date from query parameters
+  try {
+    const orders = await Order.find({ deliveryDate: new Date(deliveryDate) }).populate("userId");
+    res.status(200).json(orders);
+  } catch (error) {
+    res.status(500).json({ message: "Error filtering orders", error });
+  }
+};
+
+// Controller to update order status (Admin)
+exports.updateOrderStatus = async (req, res) => {
+  const { orderId, status } = req.body; // Get order ID and new status from request body
+  try {
+    const updatedOrder = await Order.findOneAndUpdate(
+      { orderId },
+      { status },
+      { new: true } // Return the updated order
+    );
+    res.status(200).json({ message: "Order status updated", updatedOrder });
+  } catch (error) {
+    res.status(500).json({ message: "Error updating order status", error });
+  }
+};
+
+// Controller to delete an order (Admin)
+exports.deleteOrder = async (req, res) => {
+  const { orderId } = req.params; // Get order ID from route parameters
+  try {
+    await Order.findOneAndDelete({ orderId });
+    res.status(200).json({ message: "Order deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting order", error });
+  }
+};

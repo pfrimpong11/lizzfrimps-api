@@ -57,3 +57,26 @@ exports.submitFeedback = async (req, res) => {
     res.status(500).json({ message: 'Error submitting feedback' });
   }
 };
+
+
+
+// Get all feedback
+exports.getAllFeedback = async (req, res) => {
+  try {
+    const feedbacks = await Feedback.find(); // Fetch all feedbacks
+    res.status(200).json(feedbacks);
+  } catch (error) {
+    res.status(500).json({ message: 'Error retrieving feedbacks', error });
+  }
+};
+
+// Delete a specific feedback
+exports.deleteFeedback = async (req, res) => {
+  const feedbackId = req.params.id;
+  try {
+    await Feedback.findByIdAndDelete(feedbackId); // Find feedback by ID and delete
+    res.status(200).json({ message: 'Feedback deleted successfully.' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting feedback', error });
+  }
+};
