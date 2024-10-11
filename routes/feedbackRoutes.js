@@ -6,7 +6,7 @@ const authMiddleware = require('../middleware/authMiddleware'); // Middleware to
 const router = express.Router();
 
 // POST route for feedback submission
-router.post('/submit-feedback', authMiddleware.protect, submitFeedback);
+router.post('/submit-feedback',  submitFeedback);
 
 // Route to get all feedback
 router.get('/admin/feedback', getAllFeedback);

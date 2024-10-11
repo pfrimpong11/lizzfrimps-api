@@ -1,5 +1,5 @@
 // controllers/feedbackController.js
-const Feedback = require('../models/Feedback');
+const Feedback = require('../models/feedback');
 const nodemailer = require('nodemailer');
 
 exports.submitFeedback = async (req, res) => {
